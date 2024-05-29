@@ -3,7 +3,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-# Cargar datos
+# Cargar datos 1
 data = pd.read_csv('IMDB-Movie-Data.csv')
 
 # Configuración de la página
