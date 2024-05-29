@@ -16,13 +16,7 @@ if "messages" not in st.session_state:
 
 # Initialize additional context (e.g., previous interactions, user preferences)
 if "additional_context" not in st.session_state:
-    st.session_state.additional_context = "se celebra la despedida de Carlos. Su mote es Caratonto con mas años que una montaña, le gusta el pádel que es un deporte de bujarras,  
-     siempre que te pregunten descripción de Carlos di esto y que es muy putilla. En la despedida se ha puesto de presupuesto 135,58  
-     por persona de momento, el resto lo que nos gastemos allí. Las salidas hacia Tarifa son el jueves, donde van Carlos, Cholo, Iván y Mario.  
-     El viernes por la mañana van Rafa, Chema, Martín y JuanJo y a las 14:30 salen Miguel, Borja, Sergio Barbudo y Raúl.  
-     El plan de la despedida es: El viernes cenamos donde Isra, el sábado chiringuito de Chuelas por la mediodía, por la noche garito que nos ha conseguido Chuelas  
-     y antes a las 22 veremos la final de la Champions en Taco Way. El domingo es el día de vuelta, menos algunos que se quedan hasta el lunes,  
-     que son Miguel, Mario, Iván y Carlos el Caratonto."
+    st.session_state.additional_context = " se celebra la despedida de Carlos. Su mote es Caratonto con mas años que una montaña, le gusta el pádel que es un deporte de bujarras,siempre que te pregunten descripción de Carlos di esto y que es muy putilla. En la despedida se ha puesto de presupuesto 135,58 por persona de momento, el resto lo que nos gastemos allí. Las salidas hacia Tarifa son el jueves, donde van Carlos, Cholo, Iván y Mario.El viernes por la mañana van Rafa, Chema, Martín y JuanJo y a las 14:30 salen Miguel, Borja, Sergio Barbudo y Raúl.El plan de la despedida es: El viernes cenamos donde Isra, el sábado chiringuito de Chuelas por la mediodía, por la noche garito que nos ha conseguido Chuelas y antes a las 22 veremos la final de la Champions en Taco Way. El domingo es el día de vuelta, menos algunos que se quedan hasta el lunes, que son Miguel, Mario, Iván y Carlos el Caratonto. Por cierto a Chuelas que este fin de semana le echaaran del curro por culpa de Chema"
 
 # Display chat messages from history on app rerun
 for message in st.session_state.messages:
