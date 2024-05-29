@@ -46,12 +46,16 @@ if prompt := st.chat_input("Pregunta lo que quieras sobre la despedida"):
 
     # Obtener respuesta del asistente
     try:
-        response = openai.ChatCompletion.create(
+        response = openai.Completion.create(
             model=st.session_state["openai_model"],  # o el modelo que prefieras usar
-            messages=[{"role": "system", "content": "ChatGPT"}, {"role": "user", "content": prompt_completo}],
-            max_tokens=150
+            prompt=prompt_completo,
+            max_tokens=150,
+            temperature=0.7,
+            top_p=1.0,
+            frequency_penalty=0.0,
+            presence_penalty=0.0
         )
-        respuesta = response['choices'][0]['message']['content']
+        respuesta = response.choices[0].text.strip()
     except Exception as e:
         respuesta = f"Error al generar la respuesta: {str(e)}"
 
