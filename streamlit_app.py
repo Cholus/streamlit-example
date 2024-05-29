@@ -13,15 +13,8 @@ unique_genres = set()
 data['Genre'].str.split(',').apply(unique_genres.update)
 unique_genres = sorted(unique_genres)
 
-# Input de texto para género
-genre_input = st.sidebar.text_input('Ingrese el Género:')
-matched_genres = [genre for genre in unique_genres if genre_input.lower() in genre.lower()]
-
-# Mostrar géneros coincidentes como etiquetas
-if genre_input:
-    st.sidebar.write("Géneros coincidentes:")
-    for genre in matched_genres:
-        st.sidebar.write(f"- {genre}")
+# Lista desplegable para género
+selected_genre = st.sidebar.selectbox('Seleccione el Género:', unique_genres)
 
 # Slider de año
 min_year, max_year = int(data['Year'].min()), int(data['Year'].max())
@@ -29,9 +22,7 @@ year_range = st.sidebar.slider('Seleccione el Rango de Años:', min_value=min_ye
 
 # Aplicar filtros
 filtered_data = data[(data['Year'] >= year_range[0]) & (data['Year'] <= year_range[1])]
-if matched_genres:
-    pattern = '|'.join(matched_genres)
-    filtered_data = filtered_data[filtered_data['Genre'].str.contains(pattern, case=False, na=False)]
+filtered_data = filtered_data[filtered_data['Genre'].str.contains(selected_genre, case=False, na=False)]
 
 # Gráfico
 fig, ax = plt.subplots()
@@ -40,3 +31,7 @@ ax.set_xlabel('Rating')
 ax.set_ylabel('Revenue (Millions)')
 ax.set_title('Rating vs Revenue')
 st.pyplot(fig)
+
+# Mostrar tabla dinámica
+st.write("Películas seleccionadas y su Ingreso:")
+st.dataframe(filtered_data[['Title', 'Revenue (Millions)']])
