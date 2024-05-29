@@ -8,8 +8,8 @@ data = pd.read_csv('IMDB-Movie-Data.csv')
 # Título de la aplicación
 st.title('Análisis de Películas')
 
-# Filtro de género
-genre_filter = st.sidebar.multiselect('Seleccione el Género:', options=data['Genre'].unique())
+# Input de texto para género
+genre_input = st.sidebar.text_input('Ingrese el Género:')
 
 # Slider de año
 min_year, max_year = int(data['Year'].min()), int(data['Year'].max())
@@ -17,8 +17,8 @@ year_range = st.sidebar.slider('Seleccione el Rango de Años:', min_value=min_ye
 
 # Aplicar filtros
 filtered_data = data[(data['Year'] >= year_range[0]) & (data['Year'] <= year_range[1])]
-if genre_filter:
-    filtered_data = filtered_data[filtered_data['Genre'].str.contains('|'.join(genre_filter))]
+if genre_input:
+    filtered_data = filtered_data[filtered_data['Genre'].str.contains(genre_input, case=False, na=False)]
 
 # Gráfico
 fig, ax = plt.subplots()
