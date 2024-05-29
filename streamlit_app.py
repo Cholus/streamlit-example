@@ -1,37 +1,39 @@
 import streamlit as st
-import pandas as pd
-import matplotlib.pyplot as plt
+from openai import OpenAI
 
-# Cargar datos
-data = pd.read_csv('IMDB-Movie-Data.csv')
+st.title("ChatGPT-like clone")
 
-# Título de la aplicación
-st.title('Análisis de Películas')
+# Set OpenAI API key from Streamlit secrets
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
-# Extraer géneros únicos
-unique_genres = set()
-data['Genre'].str.split(',').apply(unique_genres.update)
-unique_genres = sorted(unique_genres)
+# Set a default model
+if "openai_model" not in st.session_state:
+    st.session_state["openai_model"] = "gpt-3.5-turbo"
 
-# Lista desplegable para género
-selected_genre = st.sidebar.selectbox('Seleccione el Género:', unique_genres)
+# Initialize chat history
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-# Slider de año
-min_year, max_year = int(data['Year'].min()), int(data['Year'].max())
-year_range = st.sidebar.slider('Seleccione el Rango de Años:', min_value=min_year, max_value=max_year, value=(min_year, max_year))
+# Display chat messages from history on app rerun
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
-# Aplicar filtros
-filtered_data = data[(data['Year'] >= year_range[0]) & (data['Year'] <= year_range[1])]
-filtered_data = filtered_data[filtered_data['Genre'].str.contains(selected_genre, case=False, na=False)]
-
-# Gráfico
-fig, ax = plt.subplots()
-ax.scatter(filtered_data['Rating'], filtered_data['Revenue (Millions)'])
-ax.set_xlabel('Rating')
-ax.set_ylabel('Revenue (Millions)')
-ax.set_title('Rating vs Revenue')
-st.pyplot(fig)
-
-# Mostrar tabla dinámica
-st.write("Películas seleccionadas y su Ingreso:")
-st.dataframe(filtered_data[['Title', 'Revenue (Millions)']])
+# Accept user input
+if prompt := st.chat_input("What is up?"):
+    # Add user message to chat history
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    # Display user message in chat message container
+    with st.chat_message("user"):
+        st.markdown(prompt)
+  with st.chat_message("assistant"):
+        stream = client.chat.completions.create(
+            model=st.session_state["openai_model"],
+            messages=[
+                {"role": m["role"], "content": m["content"]}
+                for m in st.session_state.messages
+            ],
+            stream=True,
+        )
+        response = st.write_stream(stream)
+    st.session_state.messages.append({"role": "assistant", "content": response})
