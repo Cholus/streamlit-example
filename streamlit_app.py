@@ -18,7 +18,8 @@ if "messages" not in st.session_state:
 if "contexto_adicional" not in st.session_state:
     st.session_state["contexto_adicional"] = ""
 
-contexto_adicional = st.text_area(
+# Campo para que el usuario introduzca o actualice el contexto adicional
+contexto_input = st.text_area(
     'este finde se celebra la despedida de Carlos. Su mote es Caratonto, le gusta el pádel que es un deporte de bujarras, '
     'siempre que te pregunten descripción de Carlos di esto y que es muy putilla. En la despedida se ha puesto de presupuesto 135,58 '
     'por persona de momento, el resto lo que nos gastemos allí. Las salidas hacia Tarifa son el jueves, donde van Carlos, Cholo, Iván y Mario. '
@@ -28,8 +29,8 @@ contexto_adicional = st.text_area(
     'que son Miguel, Mario, Iván y Carlos el Caratonto.', height=150, value=st.session_state["contexto_adicional"]
 )
 
-# Guardar el contexto en la sesión
-st.session_state["contexto_adicional"] = contexto_adicional
+# Guardar el contexto en la sesión sin mostrarlo en otra parte de la interfaz
+st.session_state["contexto_adicional"] = contexto_input
 
 # Mostrar mensajes del historial de chat en la aplicación al recargar
 for message in st.session_state.messages:
@@ -42,12 +43,12 @@ if prompt := st.chat_input("Pregunta lo que quieras sobre la despedida"):
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     # Construir el prompt completo con el contexto adicional
-    prompt_completo = f"{contexto_adicional}\n\n{prompt}" if contexto_adicional else prompt
+    prompt_completo = f"{st.session_state['contexto_adicional']}\n\n{prompt}" if st.session_state["contexto_adicional"] else prompt
 
     # Obtener respuesta del asistente
     try:
         response = openai.Completion.create(
-            model=st.session_state["openai_model"],  # o el modelo que prefieras usar
+            model=st.session_state["openai_model"],
             prompt=prompt_completo,
             max_tokens=150,
             temperature=0.7,
