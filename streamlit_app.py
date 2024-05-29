@@ -3,14 +3,19 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Cargar datos
-data = pd.read_csv('IMDB-Movie-Data.csv')
+data = pd.read_csv('path_to_your_csv_file.csv')
 
 # Título de la aplicación
 st.title('Análisis de Películas')
 
+# Extraer géneros únicos
+unique_genres = set()
+data['Genre'].str.split(',').apply(unique_genres.update)
+unique_genres = sorted(unique_genres)
+
 # Input de texto para género
 genre_input = st.sidebar.text_input('Ingrese el Género:')
-matched_genres = data['Genre'].apply(lambda x: x if genre_input.lower() in x.lower() else None).dropna().unique()
+matched_genres = [genre for genre in unique_genres if genre_input.lower() in genre.lower()]
 
 # Mostrar géneros coincidentes como etiquetas
 if genre_input:
@@ -24,8 +29,9 @@ year_range = st.sidebar.slider('Seleccione el Rango de Años:', min_value=min_ye
 
 # Aplicar filtros
 filtered_data = data[(data['Year'] >= year_range[0]) & (data['Year'] <= year_range[1])]
-if genre_input:
-    filtered_data = filtered_data[filtered_data['Genre'].str.contains(genre_input, case=False, na=False)]
+if matched_genres:
+    pattern = '|'.join(matched_genres)
+    filtered_data = filtered_data[filtered_data['Genre'].str.contains(pattern, case=False, na=False)]
 
 # Gráfico
 fig, ax = plt.subplots()
