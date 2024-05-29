@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Cargar datos
-data = pd.read_csv('path_to_your_csv_file.csv')
+data = pd.read_csv('IMDB-Movie-Data.csv')
 
 # Título de la aplicación
 st.title('Análisis de Películas')
