@@ -10,6 +10,13 @@ st.title('Análisis de Películas')
 
 # Input de texto para género
 genre_input = st.sidebar.text_input('Ingrese el Género:')
+matched_genres = data['Genre'].apply(lambda x: x if genre_input.lower() in x.lower() else None).dropna().unique()
+
+# Mostrar géneros coincidentes como etiquetas
+if genre_input:
+    st.sidebar.write("Géneros coincidentes:")
+    for genre in matched_genres:
+        st.sidebar.write(f"- {genre}")
 
 # Slider de año
 min_year, max_year = int(data['Year'].min()), int(data['Year'].max())
